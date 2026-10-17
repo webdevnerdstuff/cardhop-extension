@@ -1,9 +1,10 @@
 import { refreshSaveBadges, updateSaveBadge } from './badge.ts';
+import { forgetBankLanding, handleBankLandingUpdate } from './bank-landing.ts';
 import { syncCheckoutScript } from './checkout-access.ts';
 import { buildCheckoutButtons, isCheckoutButtonsRequest, isCheckoutFrameMessage, isOpenOptionsRequest } from './checkout-messages.ts';
 import { ext } from './ext.ts';
 import { isOpenBankMessage, openSavedCard, openVirtualCards } from './open.ts';
-import { getSavedCards, SAVED_CARDS_KEY } from './saved-cards.ts';
+import { BANK_LANDINGS_KEY, getSavedCards, SAVED_CARDS_KEY } from './saved-cards.ts';
 import { applyActionMode, BANK_IDS, bankLabel, canOpenDirectly, cardMenuId, getSettings, menuId } from './shared.ts';
 import { forgetTab, handleTabUpdated } from './sign-in-return.ts';
 
@@ -96,6 +97,8 @@ ext.storage.onChanged.addListener((changes, area) => {
 	if (banksChanged || cardsChanged) {
 		void syncMenus();
 		void refreshSaveBadges();
+	} else if (area === 'local' && changes[BANK_LANDINGS_KEY] !== undefined) {
+		void refreshSaveBadges();
 	}
 
 	if (banksChanged || cardsChanged || (area === 'sync' && changes.openDirectly !== undefined)) {
@@ -129,10 +132,14 @@ ext.contextMenus.onClicked.addListener(async (info, tab) => {
 ext.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	void handleTabUpdated(tabId, changeInfo, tab);
 	if (changeInfo.url !== undefined || changeInfo.status === 'complete') {
-		void updateSaveBadge(tabId, tab.url);
+		// Record a bank button's landing page first, so the badge already knows to skip it.
+		void handleBankLandingUpdate(tabId, tab.url)
+			.catch(() => undefined)
+			.then(() => updateSaveBadge(tabId, tab.url));
 	}
 });
 
 ext.tabs.onRemoved.addListener((tabId) => {
 	void forgetTab(tabId);
+	void forgetBankLanding(tabId);
 });

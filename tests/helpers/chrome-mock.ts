@@ -84,8 +84,8 @@ export function createChromeMock() {
 				set: mock.fn(async (items: Stored) => {
 					localStore = { ...localStore, ...structuredClone(items) };
 				}),
-				remove: mock.fn(async (key: string) => {
-					delete localStore[key];
+				remove: mock.fn(async (keys: string | string[]) => {
+					[keys].flat().forEach((key) => delete localStore[key]);
 				}),
 			},
 			onChanged: createEvent<[changes: Record<string, { newValue?: unknown }>, area: string]>(),
@@ -125,6 +125,7 @@ export function createChromeMock() {
 			setPopup: mock.fn(async (_details: { popup: string }) => {}),
 			setBadgeText: mock.fn(async (_details: { tabId?: number; text: string }) => {}),
 			setBadgeBackgroundColor: mock.fn(async (_details: { tabId?: number; color: string }) => {}),
+			setBadgeTextColor: mock.fn(async (_details: { tabId?: number; color: string }) => {}),
 			setTitle: mock.fn(async (_details: { tabId?: number; title: string }) => {}),
 			onClicked: createEvent<[tab: Tab]>(),
 		},
@@ -181,6 +182,7 @@ export function createChromeMock() {
 		api.action.setPopup,
 		api.action.setBadgeText,
 		api.action.setBadgeBackgroundColor,
+		api.action.setBadgeTextColor,
 		api.action.setTitle,
 		api.contextMenus.create,
 		api.contextMenus.removeAll,

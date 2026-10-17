@@ -16,6 +16,11 @@ const CAPITAL_ONE_SITE = 'https://myaccounts.capitalone.com/*';
 
 beforeEach(() => chromeMock.reset());
 
+// Tabs being watched for a sign-in detour (session storage also holds bank-button landing watches).
+function signInWatches(): string[] {
+	return Object.keys(chromeMock.getSession()).filter((key) => key.startsWith('signInReturn:'));
+}
+
 describe('openVirtualCards', () => {
 	it('opens the bank in a new tab by default', async () => {
 		await openVirtualCards('citi', 7);
@@ -74,24 +79,37 @@ describe('watching for a sign-in detour', () => {
 	it('watches the new tab when return-after-sign-in is enabled', async () => {
 		chromeMock.grant(CAPITAL_ONE_SITE);
 		await openVirtualCards('capitalOne');
-		assert.deepEqual(Object.keys(chromeMock.getSession()), [`signInReturn:${NEW_TAB_ID}`]);
+		assert.deepEqual(signInWatches(), [`signInReturn:${NEW_TAB_ID}`]);
 	});
 
 	it('watches the replaced tab when opening in the current tab', async () => {
 		chromeMock.grant(CAPITAL_ONE_SITE);
 		chromeMock.setStored({ openIn: 'currentTab' });
 		await openVirtualCards('capitalOne');
-		assert.deepEqual(Object.keys(chromeMock.getSession()), [`signInReturn:${ACTIVE_TAB_ID}`]);
+		assert.deepEqual(signInWatches(), [`signInReturn:${ACTIVE_TAB_ID}`]);
 	});
 
 	it('watches nothing when the permission has not been granted', async () => {
 		await openVirtualCards('capitalOne');
-		assert.deepEqual(chromeMock.getSession(), {});
+		assert.deepEqual(signInWatches(), []);
 	});
 
 	it('watches nothing for banks that don’t need it', async () => {
 		chromeMock.grant(CAPITAL_ONE_SITE);
 		await openVirtualCards('citi');
+		assert.deepEqual(signInWatches(), []);
+	});
+});
+
+describe('watching where the bank button lands', () => {
+	it('watches the tab the bank button opens', async () => {
+		await openVirtualCards('citi');
+		assert.deepEqual(Object.keys(chromeMock.getSession()), [`bankLanding:${NEW_TAB_ID}`]);
+	});
+
+	it('does not watch a saved card page', async () => {
+		const card = await addSavedCard(SECOND_CARD, 'Second');
+		await openSavedCard(card.id);
 		assert.deepEqual(chromeMock.getSession(), {});
 	});
 });

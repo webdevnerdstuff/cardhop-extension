@@ -90,7 +90,7 @@ Citi doesn't have this setting yet. To add it for a bank, give that bank a `sign
 
 Capital One's virtual cards page opens on your first card after you sign in. To jump straight to another card, save its page:
 
-- Open that card's virtual cards page, then open CardHop and click **Save**. The CardHop icon shows a **+** on card pages you haven't saved. (Both need returning after sign-in turned on, so CardHop can see the page address.) Or
+- Open that card's virtual cards page, then open CardHop and click **Save**. The CardHop icon shows a **+** on card pages you haven't saved, except the page the bank's own button opens. (Both need returning after sign-in turned on, so CardHop can see the page address.) Or
 - Paste the page's link under **Settings → Card buttons**.
 
 Until you save one, the popup shows a short tip explaining this; **Got it** hides it.

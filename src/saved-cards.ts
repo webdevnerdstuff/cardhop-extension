@@ -116,5 +116,41 @@ export async function removeSavedCard(id: string): Promise<void> {
 }
 
 export async function forgetAllCards(): Promise<void> {
-	await ext.storage.local.remove(SAVED_CARDS_KEY);
+	await ext.storage.local.remove([SAVED_CARDS_KEY, BANK_LANDINGS_KEY]);
+}
+
+// Where each bank's button last landed. Capital One adds the default card to its general page's address,
+// which then looks like any card page, but the bank button already opens it, so CardHop doesn't offer to
+// save it. Kept on this device only, like saved card pages.
+export const BANK_LANDINGS_KEY = 'bankLandings';
+
+export type BankLandings = Partial<Record<BankId, string>>;
+
+export async function getBankLandings(): Promise<BankLandings> {
+	const stored = await ext.storage.local.get(BANK_LANDINGS_KEY);
+	const landings: unknown = stored[BANK_LANDINGS_KEY];
+	if (typeof landings !== 'object' || landings === null) {
+		return {};
+	}
+	return Object.fromEntries(Object.entries(landings).filter(([bankId, url]) => (
+		isBankId(bankId) && typeof url === 'string' && bankForCardUrl(url) === bankId
+	)));
+}
+
+export async function setBankLanding(bankId: BankId, url: string): Promise<void> {
+	const href = new URL(url.trim()).href;
+	const landings = await getBankLandings();
+	if (landings[bankId] !== href) {
+		await ext.storage.local.set({ [BANK_LANDINGS_KEY]: { ...landings, [bankId]: href } });
+	}
+}
+
+// True for the pages a bank's own button opens: its general virtual cards page, or where that last landed.
+export function isBankPage(url: string, landings: BankLandings): boolean {
+	const bankId = bankForCardUrl(url);
+	if (bankId === undefined) {
+		return false;
+	}
+	const href = new URL(url.trim()).href;
+	return href === new URL(BANKS[bankId].url).href || href === landings[bankId];
 }

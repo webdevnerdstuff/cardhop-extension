@@ -10,7 +10,8 @@ const { api } = chromeMock;
 // Importing registers the background script's listeners on the mock.
 await import('../src/background.ts');
 const { BANKS } = await import('../src/shared.ts');
-const { addSavedCard, SAVED_CARDS_KEY } = await import('../src/saved-cards.ts');
+const { SAVE_BADGE_TEXT } = await import('../src/badge.ts');
+const { addSavedCard, BANK_LANDINGS_KEY, getBankLandings, SAVED_CARDS_KEY } = await import('../src/saved-cards.ts');
 
 const SECOND_CARD = 'https://myaccounts.capitalone.com/vc/virtual-cards/home?arid=abc';
 
@@ -301,7 +302,7 @@ describe('open requests from the popup', () => {
 	it('starts watching the new tab for a sign-in detour', async () => {
 		chromeMock.grant('https://myaccounts.capitalone.com/*');
 		await fire(api.runtime.onMessage, { type: 'openBank', bankId: 'capitalOne' });
-		assert.deepEqual(Object.keys(chromeMock.getSession()), ['signInReturn:101']);
+		assert.deepEqual(Object.keys(chromeMock.getSession()), ['signInReturn:101', 'bankLanding:101']);
 	});
 
 	it('ignores other messages', async () => {
@@ -393,7 +394,35 @@ describe('custom names and the save badge', () => {
 	it('updates the badge when a tab finishes loading', async () => {
 		chromeMock.setStored({ banks: ['capitalOne'] });
 		await fire(api.tabs.onUpdated, 4, { status: 'complete' }, { url: SECOND_CARD });
-		assert.deepEqual(callArgs(api.action.setBadgeText), [[{ tabId: 4, text: '+' }]]);
+		assert.deepEqual(callArgs(api.action.setBadgeText), [[{ tabId: 4, text: SAVE_BADGE_TEXT }]]);
+	});
+
+	it('records where the bank button lands and shows no badge there', async () => {
+		const landing = `${BANKS.capitalOne.url}?arid=default`;
+		chromeMock.setStored({ banks: ['capitalOne'] });
+		await fire(api.contextMenus.onClicked, { menuItemId: 'open-capitalOne' });
+		const tabId = 101;
+
+		await fire(api.tabs.onUpdated, tabId, { url: landing }, { url: landing });
+
+		assert.deepEqual(await getBankLandings(), { capitalOne: landing });
+		assert.deepEqual(callArgs(api.action.setBadgeText), [[{ tabId, text: '' }]]);
+	});
+
+	it('rechecks the badges when the bank button lands somewhere new', async () => {
+		await fire(api.storage.onChanged, { [BANK_LANDINGS_KEY]: { newValue: {} } }, 'local');
+		assert.equal(api.tabs.query.mock.callCount(), 1);
+		assert.equal(api.contextMenus.removeAll.mock.callCount(), 0, 'menus are unaffected');
+	});
+
+	it('stops watching for the landing page when a saved card replaces the tab', async () => {
+		chromeMock.setStored({ banks: ['capitalOne'], openIn: 'currentTab' });
+		await fire(api.contextMenus.onClicked, { menuItemId: 'open-capitalOne' }, { id: 5 });
+		const card = await addSavedCard(SECOND_CARD, 'Second');
+		await fire(api.contextMenus.onClicked, { menuItemId: `open-card-${card.id}` }, { id: 5 });
+
+		await fire(api.tabs.onUpdated, 5, { url: SECOND_CARD }, { url: SECOND_CARD });
+		assert.deepEqual(await getBankLandings(), {});
 	});
 });
 

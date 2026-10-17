@@ -437,6 +437,14 @@ describe('saved card pages', () => {
 		assert.equal(element(doc, '#save-current').hidden, true);
 	});
 
+	it('does not offer the card page the bank button landed on', async () => {
+		const { BANK_LANDINGS_KEY } = await import('../src/saved-cards.ts');
+		chromeMock.setLocal({ [BANK_LANDINGS_KEY]: { capitalOne: SECOND_CARD } });
+		chromeMock.setActiveTabUrl(SECOND_CARD);
+		const doc = await openPopup({ stored: { banks: ['capitalOne'] } });
+		assert.equal(element(doc, '#save-current').hidden, true);
+	});
+
 	it('does not offer a card page when its bank is not selected', async () => {
 		chromeMock.setActiveTabUrl(SECOND_CARD);
 		const doc = await openPopup({ stored: { banks: ['citi'] } });

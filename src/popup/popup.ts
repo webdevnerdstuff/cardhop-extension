@@ -8,12 +8,14 @@ import {
 	CardPageError,
 	defaultLabel,
 	forgetAllCards,
+	getBankLandings,
 	getSavedCards,
+	isBankPage,
 	isSaved,
 	removeSavedCard,
 	renameSavedCard,
 } from '../saved-cards.ts';
-import type { SavedCard } from '../saved-cards.ts';
+import type { BankLandings, SavedCard } from '../saved-cards.ts';
 import {
 	BANK_IDS,
 	bankLabel,
@@ -78,6 +80,7 @@ const orList = new Intl.ListFormat('en', { type: 'disjunction' });
 
 let settings: Settings = DEFAULT_SETTINGS;
 let savedCards: SavedCard[] = [];
+let bankLandings: BankLandings = {};
 // The page in the active tab, when it is a card page CardHop could offer to save.
 let currentCardUrl: string | undefined;
 
@@ -168,7 +171,8 @@ function renderSignInReturnNotices(banks: BankId[]): void {
 // sites CardHop has permission for, so this appears once returning after sign-in is turned on.
 function renderSaveCurrent(banks: BankId[]): void {
 	const bankId = currentCardUrl === undefined ? undefined : bankForCardUrl(currentCardUrl);
-	const show = bankId !== undefined && banks.includes(bankId) && currentCardUrl !== undefined && !isSaved(currentCardUrl, savedCards);
+	const show = bankId !== undefined && banks.includes(bankId) && currentCardUrl !== undefined
+		&& !isSaved(currentCardUrl, savedCards) && !isBankPage(currentCardUrl, bankLandings);
 	saveCurrent.hidden = !show;
 	if (show) {
 		saveCurrentLabel.placeholder = defaultLabel(bankId, savedCards);
@@ -330,6 +334,7 @@ function renderBankState(banks: BankId[]): void {
 async function reload(): Promise<void> {
 	settings = await getSettings();
 	savedCards = await getSavedCards();
+	bankLandings = await getBankLandings();
 	renderBankState(selectedBanks());
 }
 
@@ -488,6 +493,7 @@ async function init(): Promise<void> {
 
 	settings = await getSettings();
 	savedCards = await getSavedCards();
+	bankLandings = await getBankLandings();
 
 	openDirectlyInput.checked = settings.openDirectly;
 	openInSelect.value = settings.openIn;

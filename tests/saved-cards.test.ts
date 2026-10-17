@@ -7,12 +7,15 @@ chromeMock.install();
 
 const {
 	addSavedCard,
+	BANK_LANDINGS_KEY,
 	bankForCardUrl,
 	CardPageError,
 	defaultLabel,
 	findSavedCard,
 	forgetAllCards,
+	getBankLandings,
 	getSavedCards,
+	isBankPage,
 	isSaved,
 	MAX_LABEL_LENGTH,
 	removeSavedCard,
@@ -23,6 +26,7 @@ const {
 const SECOND_CARD = 'https://myaccounts.capitalone.com/vc/virtual-cards/home?analyticsTag=from_digital_card&arid=abc%3D';
 const THIRD_CARD = 'https://myaccounts.capitalone.com/vc/virtual-cards/home?arid=xyz';
 const CITI_PAGE = 'https://online.citi.com/US/ag/repcard/van2?card=1';
+const { BANKS } = await import('../src/shared.ts');
 
 beforeEach(() => chromeMock.reset());
 
@@ -139,6 +143,12 @@ describe('deleting card pages', () => {
 		assert.deepEqual(await getSavedCards(), []);
 		assert.equal(SAVED_CARDS_KEY in chromeMock.getLocal(), false);
 	});
+
+	it('forgets where the bank buttons landed too', async () => {
+		chromeMock.setLocal({ [BANK_LANDINGS_KEY]: { capitalOne: THIRD_CARD } });
+		await forgetAllCards();
+		assert.equal(BANK_LANDINGS_KEY in chromeMock.getLocal(), false);
+	});
 });
 
 describe('reading stored cards', () => {
@@ -158,5 +168,27 @@ describe('reading stored cards', () => {
 	it('returns nothing when storage holds something else', async () => {
 		chromeMock.setLocal({ [SAVED_CARDS_KEY]: 'nope' });
 		assert.deepEqual(await getSavedCards(), []);
+	});
+});
+
+describe('bank pages', () => {
+	it('counts the bank’s general page and the card page its button last landed on', () => {
+		const landings = { capitalOne: THIRD_CARD };
+		assert.equal(isBankPage(BANKS.capitalOne.url, landings), true);
+		assert.equal(isBankPage(BANKS.citi.url, landings), true);
+		assert.equal(isBankPage(THIRD_CARD, landings), true);
+		assert.equal(isBankPage(SECOND_CARD, landings), false);
+		assert.equal(isBankPage(CITI_PAGE, landings), false);
+		assert.equal(isBankPage('https://example.com', landings), false);
+	});
+
+	it('ignores malformed or tampered landing pages', async () => {
+		chromeMock.setLocal({
+			[BANK_LANDINGS_KEY]: { capitalOne: THIRD_CARD, citi: 'https://example.com/US/', other: THIRD_CARD },
+		});
+		assert.deepEqual(await getBankLandings(), { capitalOne: THIRD_CARD });
+
+		chromeMock.setLocal({ [BANK_LANDINGS_KEY]: 'nope' });
+		assert.deepEqual(await getBankLandings(), {});
 	});
 });
