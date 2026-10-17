@@ -2,9 +2,9 @@
 	"name": "cardhop",
 	"version": "1.0.0",
 	"private": true,
-	"description": "Browser extension: one-click shortcut to your Capital One or Citi virtual card page.",
+	"description": "Browser extension: shortcut to your Capital One or Citi virtual card page.",
 	"license": "MIT",
-	"author": "WebDevNerdStuff",
+	"author": "WebDevNerdStuff & Bunnies... lots and lots of bunnies! <webdevnerdstuff@gmail.com> (https://webdevnerdstuff.com)",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/WebDevNerdStuff/cardhop-extension.git"
