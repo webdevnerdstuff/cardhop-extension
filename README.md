@@ -1,15 +1,35 @@
-# CardHop: Virtual Card Shortcut
+<p align="center">
+	<img src="src/icons/icon128.png" width="96" height="96" alt="CardHop icon">
+</p>
 
-CardHop is a small browser extension (Manifest V3) that takes you straight to your bank's virtual card page:
+<h1 align="center">CardHop</h1>
+
+<p align="center">
+	<strong>Your shortcut to virtual cards.</strong><br>
+	A small browser extension that takes you straight to your Capital One® or Citi® virtual card page.
+</p>
+
+<p align="center">
+	<a href="https://github.com/webdevnerdstuff/cardhop-extension/actions/workflows/test.yml"><img src="https://github.com/webdevnerdstuff/cardhop-extension/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+	<img src="https://img.shields.io/badge/manifest-v3-2f86d6" alt="Manifest V3">
+	<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22a06b" alt="MIT license"></a>
+</p>
+
+<p align="center">
+	<img src="store/screenshot-1-popup.png" alt="The CardHop popup, with buttons for each bank's virtual cards and saved card pages, grouped by bank" width="800">
+</p>
+
+An unofficial stand-in for the retired Eno® browser extension. CardHop doesn't read or fill card numbers. It opens your bank's virtual card page, where you sign in and copy a virtual card as usual.
+
+- **From the toolbar:** one button per bank, plus buttons for card pages you save.
+- **From the right-click menu:** on any page or text field, handy at checkout.
+- **At checkout (optional):** a small prompt offers your virtual cards when you click into a card field.
+- **Private:** no data collected, nothing sent anywhere. See the [privacy policy](PRIVACY.md).
 
 | Bank | Page |
 |---|---|
 | Capital One | https://myaccounts.capitalone.com/vc/virtual-cards/manager |
 | Citi | https://online.citi.com/US/ag/repcard/van2 |
-
-It is an unofficial stand-in for the retired Eno® browser extension. It does not read or fill card numbers. It only opens the page, where you sign in and copy a virtual card as usual.
-
-Capital One® and Eno® are registered trademarks of Capital One Financial Corp. Citi® is a registered trademark of Citigroup Inc. CardHop is independent and is not affiliated with, sponsored by, or endorsed by Capital One or Citi.
 
 ## Supported browsers
 
@@ -66,6 +86,17 @@ When you choose Capital One, the popup explains this and offers a **Turn on** bu
 
 Citi doesn't have this setting yet. To add it for a bank, give that bank a `signInReturn` entry in `src/shared.ts` (including the page it lands on after sign-in) and list its site under `optional_host_permissions` in `src/manifest.json`.
 
+### Saved card pages
+
+Capital One's virtual cards page opens on your first card after you sign in. To jump straight to another card, save its page:
+
+- Open that card's virtual cards page, then open CardHop and click **Save**. The CardHop icon shows a **+** on card pages you haven't saved. (Both need returning after sign-in turned on, so CardHop can see the page address.) Or
+- Paste the page's link under **Settings → Card buttons**.
+
+Until you save one, the popup shows a short tip explaining this; **Got it** hides it.
+
+Only virtual card pages on Capital One's or Citi's own sites can be saved. Saved links are kept only in this browser on this device (extension local storage, never synced) and are never sent anywhere. Rename or delete them one at a time in Settings, or use **Forget my cards** to remove them all. If you were signed out, CardHop returns you to the saved card after you sign in.
+
 ## Install from source
 
 Use Node.js 24 and [pnpm](https://pnpm.io). The Node version is in `.nvmrc`, so [nvm](https://github.com/nvm-sh/nvm) users can run `nvm use` in the project folder. The pnpm version is pinned in `package.json`, and Corepack or pnpm 9.7+ switches to it automatically.
@@ -94,17 +125,6 @@ This creates `build/chromium` and `build/firefox`.
 Firefox removes temporary add-ons when it restarts.
 
 After changing the code, run `pnpm build` again and reload the extension.
-
-### Saved card pages
-
-Capital One's virtual cards page opens on your first card after you sign in. To jump straight to another card, save its page:
-
-- Open that card's virtual cards page, then open CardHop and click **Save**. The CardHop icon shows a **+** on card pages you haven't saved. (Both need returning after sign-in turned on, so CardHop can see the page address.) Or
-- Paste the page's link under **Settings → Card buttons**.
-
-Until you save one, the popup shows a short tip explaining this; **Got it** hides it.
-
-Only virtual card pages on Capital One's or Citi's own sites can be saved. Saved links are kept only in this browser on this device (extension local storage, never synced) and are never sent anywhere. Rename or delete them one at a time in Settings, or use **Forget my cards** to remove them all. If you were signed out, CardHop returns you to the saved card after you sign in.
 
 ## Permissions
 
@@ -177,10 +197,6 @@ cd src/icons && for s in 16 32 48 128; do magick -background none -density 384 i
 
 Banks live in `BANKS` in `src/shared.ts`. Before adding one, check that its virtual card URL works when opened in a fresh tab, both signed in and signed out. Some bank pages only work when reached through the site's own menus (Citi's `van3/dashboard` is one).
 
-## Roadmap
-
-Planned work and what has shipped is in [ROADMAP.md](ROADMAP.md).
-
 ## Contributing
 
 Issues and pull requests are welcome. Please run `pnpm typecheck` and `pnpm test` before opening a pull request, and keep host access optional and off by default, and keep the extension free of anything that reads or stores card details or page content.
@@ -188,3 +204,5 @@ Issues and pull requests are welcome. Please run `pnpm typecheck` and `pnpm test
 ## License
 
 [MIT](LICENSE) © WebDevNerdStuff
+
+Capital One® and Eno® are registered trademarks of Capital One Financial Corp. Citi® is a registered trademark of Citigroup Inc. CardHop is independent and is not affiliated with, sponsored by, or endorsed by Capital One or Citi.
