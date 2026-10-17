@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CardHop</title>
+	<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+	<header class="header">
+		<img src="../icons/icon48.png" alt="" width="32" height="32">
+		<div>
+			<h1>CardHop</h1>
+			<p class="subtitle">Virtual card shortcut</p>
+		</div>
+	</header>
+
+	<main>
+		<p id="choose-bank" class="empty-state" hidden>Choose your bank below to get started.</p>
+		<div id="open-buttons" class="open-buttons"></div>
+		<p id="sign-in-hint" class="hint">Sign in if prompted.</p>
+		<div id="sign-in-return-options" hidden></div>
+
+		<section id="save-current" class="save-card" hidden>
+			<p class="save-card-title">Save this card page?</p>
+			<div class="save-card-row">
+				<input id="save-current-label" type="text" aria-label="Name for this card page">
+				<button id="save-current-button" type="button" class="secondary">Save</button>
+			</div>
+			<small>Saved only in this browser on this device. CardHop never sends it anywhere.</small>
+		</section>
+
+		<p id="saved-cards-tip" class="tip" hidden>
+			Have more than one card? Open that card's virtual cards page, then open CardHop to save it as its own button.
+			<button id="dismiss-tip" type="button" class="notice-action">Got it</button>
+		</p>
+
+		<details id="settings" class="settings">
+			<summary>Settings</summary>
+			<fieldset class="field">
+				<legend>My banks</legend>
+				<div id="bank-options"></div>
+			</fieldset>
+			<fieldset class="field">
+				<legend>Card buttons</legend>
+				<div id="saved-cards-list"></div>
+				<p id="saved-cards-empty" class="muted">No saved card pages yet. Open a card's virtual cards page, then open CardHop to save it, or paste its link below.</p>
+				<form id="add-card-form" class="add-card">
+					<input id="add-card-label" type="text" placeholder="Name (optional)" aria-label="Name">
+					<input id="add-card-url" type="url" placeholder="Card page link" aria-label="Card page link" required>
+					<button type="submit" class="secondary">Save card page</button>
+					<p id="add-card-error" class="error" role="alert" hidden></p>
+				</form>
+				<small class="muted">Saved only in this browser on this device. CardHop never sends it anywhere. Delete them any time.</small>
+				<button id="forget-cards" type="button" class="danger-link" hidden>Forget my cards</button>
+			</fieldset>
+			<fieldset class="field">
+				<legend>At checkout</legend>
+				<label class="toggle">
+					<input id="checkout-enabled" type="checkbox">
+					<span>Offer CardHop at checkout</span>
+				</label>
+				<p id="checkout-explain" class="notice" hidden>
+					To spot card fields, CardHop needs access to the sites you visit. It only checks whether a field is a card field. It never reads what you type or anything else on the page.
+					<button id="checkout-continue" type="button" class="notice-action">Continue</button>
+					<button id="checkout-cancel" type="button" class="notice-action">Not now</button>
+				</p>
+				<label id="checkout-auto-open-row" class="toggle" hidden>
+					<input id="checkout-auto-open" type="checkbox">
+					<span>Open the prompt automatically</span>
+				</label>
+				<div id="checkout-sites" class="checkout-sites" hidden>
+					<h3>Turned off on these sites</h3>
+					<ul id="checkout-sites-list" class="saved-cards"></ul>
+				</div>
+			</fieldset>
+			<label class="toggle">
+				<input id="open-directly" type="checkbox">
+				<span>
+					Skip this popup. Clicking the toolbar icon opens cards right away
+					<small id="open-directly-note">To get back here, right-click the icon and choose Options.</small>
+				</span>
+			</label>
+			<label class="field">
+				<span>Open cards in</span>
+				<select id="open-in">
+					<option value="newTab">A new tab</option>
+					<option value="currentTab">The current tab</option>
+				</select>
+			</label>
+		</details>
+	</main>
+
+	<footer class="footer">
+		Not affiliated with or endorsed by
+		<br>
+		<span id="disclaimer-banks">Capital One</span>.
+		<br>
+		<a href="https://github.com/WebDevNerdStuff/cardhop-extension" target="_blank" rel="noopener">Open source on GitHub</a>
+	</footer>
+
+	<script type="module" src="popup.js"></script>
+</body>
+</html>

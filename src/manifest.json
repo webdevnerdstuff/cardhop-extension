@@ -1,0 +1,38 @@
+{
+	"manifest_version": 3,
+	"name": "CardHop: Virtual Card Shortcut",
+	"short_name": "CardHop",
+	"version": "1.0.0",
+	"author": "WebDevNerdStuff",
+	"homepage_url": "https://github.com/WebDevNerdStuff/cardhop-extension",
+	"description": "One-click shortcut to your Capital One® or Citi® virtual card page. Unofficial. Not affiliated with or endorsed by either bank.",
+	"icons": {
+		"16": "icons/icon16.png",
+		"32": "icons/icon32.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"action": {
+		"default_title": "CardHop: open virtual cards",
+		"default_popup": "popup/popup.html",
+		"default_icon": {
+			"16": "icons/icon16.png",
+			"32": "icons/icon32.png",
+			"48": "icons/icon48.png",
+			"128": "icons/icon128.png"
+		}
+	},
+	"options_ui": {
+		"page": "popup/options.html",
+		"open_in_tab": false
+	},
+	"permissions": [
+		"contextMenus",
+		"scripting",
+		"storage"
+	],
+	"optional_host_permissions": [
+		"https://myaccounts.capitalone.com/*",
+		"<all_urls>"
+	]
+}
