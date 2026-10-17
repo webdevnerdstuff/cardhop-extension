@@ -4,3 +4,4 @@ dist/
 node_modules/
 build/
 docs/superpowers/
+STORE_LISTING.md

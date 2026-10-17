@@ -163,7 +163,7 @@ pnpm pack:stores
 | `cardhop-firefox-<version>.zip` | Firefox Add-ons |
 | `cardhop-source-<version>.zip` | Firefox Add-ons, as the source code for review |
 
-The version comes from `src/manifest.json`, which must match `package.json`. Store listing copy lives in [STORE_LISTING.md](STORE_LISTING.md).
+The version comes from `src/manifest.json`, which must match `package.json`.
 
 ### Icons
 

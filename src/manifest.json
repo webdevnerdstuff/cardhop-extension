@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"author": "WebDevNerdStuff",
 	"homepage_url": "https://github.com/WebDevNerdStuff/cardhop-extension",
-	"description": "One-click shortcut to your Capital One® or Citi® virtual card page. Unofficial. Not affiliated with or endorsed by either bank.",
+	"description": "Shortcut to your Capital One® or Citi® virtual card page. Unofficial. Not affiliated with or endorsed by either bank.",
 	"icons": {
 		"16": "icons/icon16.png",
 		"32": "icons/icon32.png",
