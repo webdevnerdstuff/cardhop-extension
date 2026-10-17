@@ -10,6 +10,7 @@ All of this is kept in your browser's extension storage. CardHop never sends it 
 
 - **Your settings:** which banks you chose, the names you gave their buttons, whether to skip the popup, where card pages open, and the checkout prompt options. Saved with your browser's extension settings, which your browser may sync to your other devices if you use browser sync.
 - **Saved card pages:** the links to card pages you chose to save, and the names you gave them. Kept only on this device, never synced. Delete them one at a time in Settings, or all at once with **Forget my cards**.
+- **Where each bank's button lands:** the card page a bank opens when you use its main CardHop button (Capital One adds your default card to the address), so CardHop doesn't offer to save a page that button already opens. Kept only on this device, never synced, replaced each time you use the button, and removed by **Forget my cards**.
 - **Sites where you turned off the checkout prompt:** kept only on this device, never synced.
 - **The tab CardHop opened:** while you sign in to Capital One, CardHop remembers which tab it opened for up to 10 minutes, so it can send that tab back to your virtual cards. This is cleared when the browser closes.
 

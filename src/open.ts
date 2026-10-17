@@ -1,3 +1,4 @@
+import { forgetBankLanding, watchBankLanding } from './bank-landing.ts';
 import { ext } from './ext.ts';
 import { findSavedCard } from './saved-cards.ts';
 import { BANKS, getSettings, isBankId, OPEN_IN } from './shared.ts';
@@ -54,6 +55,8 @@ async function openPage(bankId: BankId, url: string, tabId?: number, options: Op
 
 	if (tab?.id !== undefined) {
 		await trackTab(tab.id, bankId, { url });
+		// Only the bank's own button lands on a page CardHop shouldn't offer to save.
+		await (url === BANKS[bankId].url ? watchBankLanding(tab.id, bankId) : forgetBankLanding(tab.id));
 	}
 }
 
