@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "CardHop: Virtual Card Shortcut",
 	"short_name": "CardHop",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"author": "WebDevNerdStuff",
 	"homepage_url": "https://github.com/WebDevNerdStuff/cardhop-extension",
 	"description": "Shortcut to your Capital One® or Citi® virtual card page. Unofficial. Not affiliated with or endorsed by either bank.",

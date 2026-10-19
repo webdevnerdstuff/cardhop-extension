@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+	<a href="https://chromewebstore.google.com/detail/cardhop-virtual-card-shor/mfmcogabcmhbkpgkeopfjkcfbgnlkfla"><img src="https://img.shields.io/chrome-web-store/v/mfmcogabcmhbkpgkeopfjkcfbgnlkfla?label=chrome%20web%20store&color=2f86d6" alt="Chrome Web Store version"></a>
 	<a href="https://github.com/webdevnerdstuff/cardhop-extension/actions/workflows/test.yml"><img src="https://github.com/webdevnerdstuff/cardhop-extension/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
 	<img src="https://img.shields.io/badge/manifest-v3-2f86d6" alt="Manifest V3">
 	<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22a06b" alt="MIT license"></a>
@@ -26,6 +27,8 @@ An unofficial stand-in for the retired Eno® browser extension. CardHop doesn't 
 - **At checkout (optional):** a small prompt offers your virtual cards when you click into a card field.
 - **Private:** no data collected, nothing sent anywhere. See the [privacy policy](PRIVACY.md).
 
+**[Get CardHop from the Chrome Web Store](https://chromewebstore.google.com/detail/cardhop-virtual-card-shor/mfmcogabcmhbkpgkeopfjkcfbgnlkfla)**
+
 | Bank | Page |
 |---|---|
 | Capital One | https://myaccounts.capitalone.com/vc/virtual-cards/manager |
@@ -35,10 +38,10 @@ An unofficial stand-in for the retired Eno® browser extension. CardHop doesn't 
 
 | Browser | Build | Where to get it |
 |---|---|---|
-| Chrome, Brave, Vivaldi | `chromium` | Chrome Web Store |
-| Microsoft Edge | `chromium` | Microsoft Edge Add-ons |
-| Opera | `chromium` | Opera add-ons |
-| Firefox 140+ | `firefox` | Firefox Add-ons (AMO) |
+| Chrome, Brave, Vivaldi | `chromium` | [Chrome Web Store](https://chromewebstore.google.com/detail/cardhop-virtual-card-shor/mfmcogabcmhbkpgkeopfjkcfbgnlkfla) |
+| Microsoft Edge | `chromium` | Not listed yet; [install from source](#install-from-source) |
+| Opera | `chromium` | Not listed yet; [install from source](#install-from-source) |
+| Firefox 140+ | `firefox` | Not listed yet; [install from source](#install-from-source) |
 
 Safari is not supported.
 
